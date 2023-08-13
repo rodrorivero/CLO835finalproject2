@@ -7,7 +7,6 @@ metadata:
     volume.beta.kubernetes.io/storage-class: ebs-storage
 spec:
   storageClassName: ebs-storage
-  volumeName: ebs-pv
   accessModes:
   - ReadWriteOnce
   resources:

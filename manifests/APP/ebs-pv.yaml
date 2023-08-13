@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebs-pv
+  namespace: final
+spec:
+  capacity:
+    storage: 100Gi  # Adjust the size as needed
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain  # Change to Recycle if needed
+  storageClassName: ebs-storage  # The StorageClass you will use
+  awsElasticBlockStore:
+    volumeID: vol-0043d08a2b28bc20a
+    fsType: ext4  # Filesystem type

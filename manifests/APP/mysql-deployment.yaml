@@ -16,6 +16,9 @@ spec:
       containers:
       - name: my-db
         image: 456965715091.dkr.ecr.us-east-1.amazonaws.com/my-db:latest
+        volumeMounts:
+        - mountPath: /data
+          name: mysql-pvc
         ports:
         - containerPort: 3306
         env:
@@ -41,6 +44,6 @@ spec:
       imagePullSecrets:
         - name: mysql-secret
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-pvc
         persistentVolumeClaim:
           claimName: mysql-pvc

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: final
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-db
+  template:
+    metadata:
+      labels:
+        app: my-db
+    spec:
+      containers:
+      - name: my-db
+        image: 456965715091.dkr.ecr.us-east-1.amazonaws.com/my-db:latest
+        volumeMounts:
+        - mountPath: /data
+          name: mysql-pvc
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DBPWD
+        - name: DBHOST
+          value: "my-db"
+        - name: DBPORT
+          value: "3306"
+        - name: DATABASE
+          value: "employees"
+        - name: APP_COLOR
+          value: "blue"
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      imagePullSecrets:
+        - name: ecr-credentials
+      imagePullSecrets:
+        - name: mysql-secret
+      volumes:
+      - name: mysql-pvc
+        persistentVolumeClaim:
+          claimName: mysql-pvc

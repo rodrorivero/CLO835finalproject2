@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: final
+  annotations:
+    volume.beta.kubernetes.io/storage-class: ebs-storage
+spec:
+  storageClassName: ebs-storage
+  volumeName: ebs-pv
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  namespace: final
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: 456965715091.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: BACKGROUND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: background-config
+              key: background-url
+        - name: DBPWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DBPWD
+        - name: DBUSER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DBUSER
+        - name: DBHOST
+          value: "my-db.final.svc.cluster.local"
+        - name: DBPORT
+          value: "3306"
+        - name: DATABASE
+          value: "employees"
+        - name: APP_COLOR
+          value: "blue"
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      imagePullSecrets:
+        - name: ecr-credentials
+      imagePullSecrets:
+        - name: mysql-secret
